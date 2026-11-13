@@ -5,6 +5,18 @@ crew is generic; everything specific to your project lives in your project's rep
 
 Do this once, on the brain's branch.
 
+## Prerequisites — check these before adopting
+
+1. **Every node can push to one shared remote.** The push *is* the delivery, so a session that
+   never pushes cannot participate at all — not partially, at all. A node under a constraint that
+   forbids pushing (a sandbox, a review-only machine, a policy against publishing work in progress)
+   has to coordinate some other way; crew has nothing to offer it. Find this out now rather than
+   half-way through adoption.
+2. **Every node has its own checkout or worktree.** One checkout is one node (`identity.md`); two
+   sessions sharing a checkout both resolve to the same row and nothing can tell them apart.
+3. **A definition of done exists, or the owner will write one.** Without it the brain's checkpoint
+   never terminates (`completion.md`).
+
 ## 1 · `coordination/README.md` — the project's own channel settings
 
 Copy `templates/channel-readme.md` and fill in: the brain's branch, each node's file and branch, the timezone, and the heartbeat timeout. This is the file every node reads first, so the values that differ per project live here rather than in the protocol.

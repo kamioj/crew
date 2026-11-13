@@ -26,7 +26,8 @@ The files below live in this skill's `references/`; read the one you need rather
 | Identity | `identity.md` | which row this session is — the `.crew/node` marker, the branch cross-check, one checkout one node |
 | Registry | `nodes.md` | `coordination/nodes.yml` — who exists, which files they own, who they report to, heartbeats |
 | Takeover | `takeover.md` | stale nodes, deliberate handover, adopting a dead node's row, why the taker always opens a new branch |
-| Lanes | `lanes.md` | file ownership, one task one node, barriers for sweeping changes |
+| Lanes | `lanes.md` | file ownership, what a task may additionally grant, barriers for sweeping changes |
+| Completion | `completion.md` | the project's definition of done, who declares it, why compliance is not progress |
 | Setup | `setup.md` | the four files to create in a project |
 
 ## Commands

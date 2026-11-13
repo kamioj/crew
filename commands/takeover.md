@@ -20,7 +20,9 @@ git fetch origin
 git show origin/<brain-branch>:coordination/nodes.yml
 ```
 
-Heartbeat past the timeout (stated in `coordination/README.md`) → post a request naming the node, its last heartbeat, the task, and why you can take it (your lanes and skills).
+Heartbeat past the timeout (stated in `coordination/README.md`) **and** `holding` naming a task →
+post a request naming the node, its last heartbeat, the task, and why you can take it (your lanes
+and skills). Stale with `holding: none` is not a takeover case — nobody is waiting on it.
 
 ```
 ## <ID> · <time> · type: takeover · priority: P1

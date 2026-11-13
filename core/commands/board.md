@@ -39,6 +39,11 @@ Group by holder, and show for each task: id, subject, state, holder, lane, age o
 Then two lists that are the point of running this:
 
 - **Waiting on the user** — every unanswered `needs-owner`, oldest first
-- **Stale nodes** — every `heartbeat` past the project's timeout, with the tasks they hold
+- **Stale nodes holding a task** — `heartbeat` past the timeout **and** `holding` naming a task.
+  These are the takeover candidates; a stale row holding nothing is noise, so list it separately
+  if at all.
+
+Cross-check `holding` against what the entries say. The entries are authoritative — a row claiming
+a task the log shows as `done` is stale bookkeeping, and saying so is the point of folding the log.
 
 Nothing else surfaces those two; they are invisible until someone folds the log.

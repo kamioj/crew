@@ -25,6 +25,7 @@ coordination/
 - **Append-only.** A correction is a new entry referencing the old ID. The log is the audit trail.
 - **Lanes** are file ownership, declared as globs in each node's registry row. One task, one node. Sweeping changes wait for a declared **barrier**.
 - **Heartbeats** are a timestamp each node writes in its own registry row when a session opens and closes. A stale row makes "that session died" visible to anyone who fetches.
+- **Completion** is the project's own written definition of done, in `coordination/README.md`. The brain checks it before anything else at each checkpoint and stops when it is met — a protocol that only defines flow runs forever.
 - **Takeover** moves a task off a stale or reassigned node. The outgoing node commits, pushes to its own branch, writes a handover entry, and stops — it does not resolve conflicts. The taker opens a **new** branch, which is why a late push from the outgoing node is harmless.
 
 ## Commands

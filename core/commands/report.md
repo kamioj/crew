@@ -17,7 +17,13 @@ A `done` entry carries the commit SHA and the checks you actually ran, with thei
 
 Handing a task over → use the handover shape in the `takeover` reference, and fill in **Notes**: what you were about to do and which approaches you already discarded. The diff cannot show that, and without it the taker repeats your dead ends.
 
-## 2 · Commit and push
+## 2 · Clear your holding
+
+Posting `done`, `blocked` or a handover → set `holding: none` on your registry row in the same push.
+A row still claiming a finished task makes the next person reason it out by hand, and makes a later
+stale heartbeat look like a mid-task failure.
+
+## 3 · Commit and push
 
 ```bash
 git add coordination/<your-file>.md
@@ -31,7 +37,7 @@ Unrelated work in progress → commit only the coordination file:
 git commit -- coordination/<your-file>.md
 ```
 
-## 3 · Confirm it left
+## 4 · Confirm it left
 
 ```bash
 git log origin/<your-branch>..HEAD

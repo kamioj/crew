@@ -17,9 +17,20 @@ There is no watcher. A stale row is discovered by whoever looks — and looking 
 
 Both are granted by the brain and never self-assigned.
 
+## Is this even a takeover case?
+
+Read both fields in the row, not just the heartbeat:
+
+- stale heartbeat **and** `holding: <task>` → the takeover case below
+- stale heartbeat **and** `holding: none` → nobody is waiting on anything; note it and move on
+- fresh heartbeat → not a takeover case, whatever the node appears to be doing
+
+A heartbeat answers "has anyone reported in", never "is anyone blocked" — a node idle for hours and
+a node mid-way through a 45-minute test suite are indistinguishable by heartbeat alone.
+
 ## Case 1 — the node is gone (lease expired)
 
-Its heartbeat is older than the timeout and nothing new has arrived from it.
+Its heartbeat is older than the timeout, `holding` names a task, and nothing new has arrived from it.
 
 1. Any node may notice and ask: post a `takeover` request to the brain naming the id, its last heartbeat and the task, and say which kind you are asking for.
 2. **The brain grants it.** Only the brain revokes a task — see `brain.md`. It posts a `takeover` entry naming the task, the node losing it, and the node taking it.

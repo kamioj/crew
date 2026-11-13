@@ -21,6 +21,7 @@ nodes:
     lanes: ["coordination/**", "docs/architecture/**"]
     branch: jw/lead
     reports_to: owner    # the user
+    holding: none        # the task id this node is on, or none
     heartbeat: 2026-11-13 18:35
 
   - id: be-codex
@@ -31,6 +32,7 @@ nodes:
     lanes: ["backend/**", "deploy/**"]
     branch: codex/backend-implementation
     reports_to: brain
+    holding: BRAIN-012
     heartbeat: 2026-11-13 18:28
 ```
 
@@ -44,15 +46,55 @@ nodes:
 | `lanes` | glob patterns of the files this node owns (`lanes.md`) |
 | `branch` | the branch it pushes; its channel file lives here too |
 | `reports_to` | the id it sends entries to; `owner` means the user |
+| `holding` | the task id this node is working on, or `none` |
 | `heartbeat` | local time of its last session open or close |
 
 ## Who writes it
 
 **Every node edits its own row and nothing else.** This is the one file with more than one writer, so the rule is what keeps it mergeable: two nodes touching two different rows produce either a clean merge or a plain text conflict you resolve by keeping both rows. A node that edits someone else's row can silently change who owns a lane.
 
-Adding a row (`join`) and removing one are the same operation — one row, your own.
+Adding a row and removing one are the same operation — one row, your own.
+
+### Editing it from another branch
+
+The file lives on the brain's branch, but every node edits it, so the sequence matters:
+
+```bash
+git fetch origin
+git show origin/<brain-branch>:coordination/nodes.yml > coordination/nodes.yml
+# edit YOUR row only
+git add coordination/nodes.yml
+git commit -m "crew: <id> heartbeat"
+git push origin <your-branch>
+```
+
+The brain then merges the row in. Two nodes touching two different rows merge cleanly; the worst
+case is a plain text conflict you resolve by keeping both rows.
+
+**The brain must push the registry before any node can join.** A node that fetches before the
+first registry commit exists finds nothing to copy and stalls there with no way to tell whether it
+is early or misconfigured — so `/crew:init` pushes `coordination/` as its last step, and nodes join
+after.
 
 Changing another node's `lanes` or `reports_to` is the brain's call: post a `task` entry asking for it.
+
+## Holding
+
+Set `holding` to the task id when you `ack` a task, back to `none` when you post its `done`,
+`blocked` or handover. Two lines of bookkeeping, and they are what makes takeover mechanical:
+
+| | `holding: none` | `holding: <task>` |
+|---|---|---|
+| **heartbeat fresh** | idle — dispatch to it | working — leave it alone |
+| **heartbeat stale** | gone, but holding nothing — just note it | **gone mid-task — this is the takeover case** |
+
+Heartbeat alone cannot distinguish these. A node idle for two hours needs no takeover, and a node
+running a 45-minute test suite looks exactly as fresh as one doing nothing — without `holding`,
+every stale row has to be reasoned about by hand.
+
+The entries remain authoritative: `holding` is a pointer for triage, not the record. When the two
+disagree, the channel wins and the row is stale bookkeeping — `/crew:board` folds the log and will
+say so.
 
 ## Heartbeat
 

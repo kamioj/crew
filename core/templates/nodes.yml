@@ -14,9 +14,10 @@ nodes:
     lanes: ["coordination/**"]
     branch: <brain-branch>
     reports_to: owner    # the user
+    holding: none        # task id being worked on, or none -- set on ack, cleared on done
     heartbeat: <YYYY-MM-DD HH:MM>
 
-  # Delete the example below once real nodes have joined with /crew:join.
+  # Delete the example below once real nodes have joined with /crew:node.
   - id: be-codex
     host: workstation-01
     agent: codex
@@ -25,4 +26,5 @@ nodes:
     lanes: ["backend/**", "deploy/**"]
     branch: codex/backend
     reports_to: brain
+    holding: none
     heartbeat: 2026-11-13 18:28

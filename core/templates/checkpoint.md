@@ -14,6 +14,10 @@ Checkpoint for <project>. You are the brain (id `<brain-id>`). Reply to the user
 Fetch origin. Read your cursor from <where you keep it>: the last entry ID processed per node,
 and the last reviewed commit SHA.
 
+0. Is it finished? Evaluate the definition of done in coordination/README.md FIRST.
+   Met -> run the final acceptance, report it to the owner, and STOP: no further checkpoints.
+   Not met -> say in one line what is still missing, and continue with the pass below.
+
 1. New entries — read every node file past your cursor, P0 first then by ID:
    <list the node files and branches>
    Give each entry one outcome: ack / answer / done / rejected / needs-owner relay.
@@ -44,5 +48,8 @@ and the last reviewed commit SHA.
 ```
 
 ---
+
+**Step 0 is not optional.** A checkpoint loop with no exit keeps running after the work is done,
+and nobody ever declares the end — the user has to notice and ask. See `completion.md`.
 
 **Keep step 6's silence rule.** A checkpoint that writes an entry every time it runs fills the log with receipts, and nodes learn to skim — which is exactly when they miss a P0.

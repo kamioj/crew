@@ -19,7 +19,10 @@ Match the work to a node's `skills` and `lanes`.
 
 **Check its heartbeat first.** Dispatching to a stale node buries the task — nothing will read it, and you will be waiting on work that never started.
 
-The task needs files from two lanes → split it, or declare a barrier (`lanes.md`). Handing one node a task that forces it outside its lane guarantees a conflict later.
+The task needs files outside the node's lanes → **name them in the entry**. That grant is scoped to
+the task and expires with it (`lanes.md`), which is how a dispatch reaches into your own lane without
+a standing permission. You can only grant reach into lanes you own; files owned by a third node go
+to that node as its own entry, or wait for a barrier.
 
 ## 2 · Write it
 

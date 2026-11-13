@@ -36,6 +36,15 @@ Whenever there are new commits past your last-reviewed SHA, review the diff itse
 
 Record what you reviewed (the SHA) in your cursor so the next check starts where this one stopped.
 
+## Declaring the end
+
+The brain owns the finish line. At every checkpoint, evaluate the project's definition of done
+(`coordination/README.md`) **before** anything else: met → final acceptance, report to the owner,
+stop checkpointing; not met → one line on what is missing, then the normal pass.
+
+No definition written yet → that is the first thing to ask the owner for. Until it exists there is
+nothing to declare and the loop cannot end. See `completion.md`.
+
 ## Periodic checkpoint
 
 The brain is driven by the host's own scheduled-task feature — crew ships no daemon. `templates/checkpoint.md` is the skeleton to fill in with the project's own review list.

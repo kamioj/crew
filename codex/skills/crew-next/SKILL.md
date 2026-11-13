@@ -28,6 +28,9 @@ Read every entry past your cursor addressed to your `id` or to everyone. **P0 fi
 
 Post an `ack` for the entry you are picking up, in this same check — the brain cannot distinguish "not seen" from "seen and ignored", and an unacknowledged task gets reassigned.
 
+Set `holding: <task-id>` on your registry row at the same time. That one field is what tells
+everyone else whether your row going stale later is a takeover case or just an idle machine.
+
 ## 4 · Refresh your heartbeat
 
 ```bash
@@ -40,7 +43,11 @@ Update your own row's `heartbeat`, commit, push. A node that is working but look
 
 In the same `nodes.yml`, compare every `heartbeat` against the project's timeout (stated in `coordination/README.md`).
 
-A stale row means that node is not reporting, and its task is a candidate for takeover. You do **not** take it yourself: post a `takeover` request to the brain naming the id, its last heartbeat, and the task. Only the brain grants a task.
+Read `holding` alongside it: stale **and** holding a task is the takeover case; stale and
+`holding: none` means nobody is waiting on it, so note it and move on. Fresh is not a takeover case
+at all, however quiet the node looks.
+
+A stale row holding a task is a candidate for takeover. You do **not** take it yourself: post a `takeover` request to the brain naming the id, its last heartbeat, and the task. Only the brain grants a task.
 
 A stale heartbeat is evidence, not proof — the machine may be fine and the node simply forgot to write. That is why the brain, not the noticer, decides.
 

@@ -30,9 +30,24 @@ Write to your own file only, append-only, then push. `done` carries the commit S
 
 Claims need evidence. "Tests pass" with no command and no count is a claim the brain has to re-run anyway — give it the output.
 
+## Compliance is not progress
+
+A heartbeat, an `ack`, a pushed entry and a correctly named branch are the cost of being reachable
+— they are **not** deliverables, and reporting them as status tells the owner nothing while reading
+like progress to anyone skimming. Progress is what the task's `Acceptance` named.
+
+If the acceptance is not met, the honest entry is `in-progress` or `blocked`, not `done`.
+See `completion.md`.
+
 ## Stay in your lane
 
-Your `lanes` are the files you may change. Work that needs a file outside them goes to its owner as a `task` entry, or to the brain if no owner is listed. Editing another lane's files is how two nodes end up with conflicting work neither can merge.
+Your `lanes` are the files you may change **on your own initiative**. A `task` entry may also name
+files outside them — that grant belongs to that task and ends with it, and it is read from the
+entry rather than added to your row.
+
+Work you want to do that needs a file nobody granted you goes to its owner as a `task` entry, or to
+the brain if no owner is listed. Editing another lane's files uninvited is how two nodes end up with
+conflicting work neither can merge.
 
 Large or cross-lane changes wait for a barrier — see `lanes.md`.
 

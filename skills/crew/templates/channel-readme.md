@@ -7,6 +7,16 @@ and **a message is delivered only when its commit is pushed**. Full protocol: cr
 Timezone for every timestamp here and in entries: **<UTC+8>**.
 Heartbeat timeout: **<N minutes>** — a row older than this means the node is not reporting.
 
+## Definition of done
+
+- **M1 · <name>** — <the observable conditions, each checkable by someone who was not involved>
+- **M2 · <name>** — <M1, plus what shipping additionally requires>
+
+Declared by: the brain, against this list. Accepted by: the owner.
+
+Without this the brain's checkpoint never terminates and "are we done?" has no checkable answer
+(crew `completion.md`).
+
 ## Files, branches and ownership — one writer per file
 
 | File | Written by | Branch |

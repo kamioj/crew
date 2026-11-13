@@ -7,11 +7,22 @@ A task has exactly one holder at a time. The holder is recorded where the task w
 
 ## Lanes are file ownership
 
-A lane is a set of glob patterns in a node's `nodes.yml` row: the files that node may change. Lanes are drawn along module boundaries, because that is where work actually separates — `backend/**` and `frontend/**` can both be in flight without either node reading the other's diff.
+A lane is a set of glob patterns in a node's `nodes.yml` row, drawn along module boundaries because that is where work actually separates — `backend/**` and `frontend/**` can both be in flight without either node reading the other's diff.
 
 ```yaml
 lanes: ["backend/**", "deploy/**"]
 ```
+
+**A lane is what you may change on your own initiative — not the limit of what a task can ask of
+you.** Dispatches cross that line constantly: a node owning `frontend/src/**` gets a task that also
+needs `frontend/mocks/**`, which the brain owns.
+
+So a `task` entry may name files outside the holder's lanes, and that grant is **scoped to the
+task** — read from the entry, expiring when the task closes, never written into the registry where
+it would rot as a standing permission. A dispatcher can only grant reach into lanes it owns itself;
+files owned by a third node go to that node as its own entry.
+
+Outside a task that names them, those files are not yours. Ask.
 
 **Lanes must not overlap.** Two nodes owning the same file is the one situation git cannot resolve for you: both branches edit it, both are "right", and the merge is manual every time. When a new task needs a file that belongs to someone else:
 
