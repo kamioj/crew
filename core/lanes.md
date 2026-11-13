@@ -1,0 +1,48 @@
+# Lanes and barriers
+
+## One task, one node
+
+A task has exactly one holder at a time. The holder is recorded where the task was dispatched — the brain's `task` entry — and changes only through `takeover.md`.
+
+## Lanes are file ownership
+
+A lane is a set of glob patterns in a node's `nodes.yml` row: the files that node may change. Lanes are drawn along module boundaries, because that is where work actually separates — `backend/**` and `frontend/**` can both be in flight without either node reading the other's diff.
+
+```yaml
+lanes: ["backend/**", "deploy/**"]
+```
+
+**Lanes must not overlap.** Two nodes owning the same file is the one situation git cannot resolve for you: both branches edit it, both are "right", and the merge is manual every time. When a new task needs a file that belongs to someone else:
+
+- ask its owner with a `task` entry, or
+- ask the brain to move the file between lanes (a `nodes.yml` change, which is the brain's call), or
+- wait for a barrier if the change is large.
+
+An unowned file — matched by nobody's lanes — belongs to the brain by default. Claim it explicitly before working on it rather than assuming.
+
+## Barriers
+
+Some changes cannot be made inside a lane: a rename that touches every module, a package move, a schema migration that invalidates everyone's working copy. Done piecemeal, each node rebases onto a tree that no longer matches what it started from.
+
+A **barrier** is a point where in-flight work stops, one node executes the sweeping change alone, and everyone resumes from the result.
+
+Declaring one:
+
+```
+## <ID> · <time> · type: task · priority: P1
+**Subject:** Barrier — table rename, executed at WP-0.6
+**Context:** 114 tables renamed; every mapper and migration is affected
+**Ask:** no node merges to the integration branch between <start condition> and <end condition>;
+         <node-id> executes the rename as one commit; everyone rebases after
+**Acceptance:** rename commit on <branch>; each node confirms its lane builds after rebasing
+```
+
+What a barrier declaration must state:
+
+1. **The entry condition** — what must land first. "After the in-flight packages close", not "soon".
+2. **Who executes it** — one node. A barrier run by two nodes is not a barrier.
+3. **The release condition** — what everyone does afterwards, and how they confirm it worked.
+
+Nodes approaching a declared barrier push what they have and hold. They do not start work that the barrier would invalidate.
+
+**Barriers are expensive — every node idles through one.** Batch sweeping changes into as few as possible rather than declaring one per rename.

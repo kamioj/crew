@@ -1,0 +1,29 @@
+# GENERATED from core/templates/nodes.yml — edit the core file and run node tools/generate.mjs; hand edits will be overwritten
+# coordination/nodes.yml — crew node registry
+# One row per node. EVERY NODE EDITS ITS OWN ROW ONLY: two nodes touching two different rows
+# merge cleanly or conflict as plain text; a node editing someone else's row can silently
+# change who owns a lane. Field reference: crew `nodes.md`.
+
+timezone: UTC+8          # how timestamps here and in entries are read
+
+nodes:
+  - id: brain            # entry-ID prefix and dispatch address; unique, never reused
+    host: <machine>      # a label, not a filesystem path
+    agent: claude        # claude | codex | other
+    role: brain          # brain | node
+    skills: [review, architecture, scheduling]
+    lanes: ["coordination/**"]
+    branch: <brain-branch>
+    reports_to: owner    # the user
+    heartbeat: <YYYY-MM-DD HH:MM>
+
+  # Delete the example below once real nodes have joined with $crew-join.
+  - id: be-codex
+    host: workstation-01
+    agent: codex
+    role: node
+    skills: [java, spring, mysql]
+    lanes: ["backend/**", "deploy/**"]
+    branch: codex/backend
+    reports_to: brain
+    heartbeat: 2026-11-13 18:28

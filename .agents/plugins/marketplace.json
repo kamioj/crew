@@ -1,0 +1,15 @@
+{
+  "name": "crew",
+  "plugins": [
+    {
+      "name": "crew",
+      "source": {
+        "source": "local",
+        "path": "./codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      }
+    }
+  ]
+}

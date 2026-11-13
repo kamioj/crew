@@ -1,0 +1,15 @@
+{
+  "name": "crew",
+  "version": "0.1.0",
+  "description": "Cross-device multi-agent coordination over git: one brain directs Claude and Codex nodes on any number of machines through append-only channel files, a node registry with heartbeats, file-ownership lanes and barriers. Conventions only — no scripts, no hooks, no platform API; works on GitHub, self-hosted GitLab or any git remote",
+  "author": {
+    "name": "kamioj"
+  },
+  "keywords": [
+    "crew",
+    "coordination",
+    "multi-agent",
+    "git",
+    "cross-device"
+  ]
+}
