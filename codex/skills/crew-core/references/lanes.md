@@ -24,6 +24,21 @@ files owned by a third node go to that node as its own entry.
 
 Outside a task that names them, those files are not yours. Ask.
 
+### Telling the two cases apart — this is the hard part
+
+| What you observe | What it means | What to do |
+|---|---|---|
+| The same kind of file keeps appearing in this node's tasks | **the lane is drawn wrong** | widen the lane (a registry change, the brain's call) |
+| This one task happens to need a file, for reasons particular to it | genuine one-off reach | name it in the task entry |
+
+The failure mode is reading the first as the second. A node whose job is "change the behaviour,
+update its mocks, add the tests" owns the mocks — they are part of the work, not an exception to
+it — and a node that asks permission for them every time is paying a toll on its own lane.
+Granting it per task, or worse writing a standing exception into the registry, hides a mis-drawn
+lane behind a permission that then rots.
+
+Rule of thumb: **if you are about to grant the same file twice, fix the lane instead.**
+
 **Lanes must not overlap.** Two nodes owning the same file is the one situation git cannot resolve for you: both branches edit it, both are "right", and the merge is manual every time. When a new task needs a file that belongs to someone else:
 
 - ask its owner with a `task` entry, or

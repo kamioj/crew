@@ -10,7 +10,10 @@ The fix is not more enforcement. It is writing down the end.
 
 ## Every project writes its own definition of done
 
-It goes in `coordination/README.md`, next to the branches and the timeout, because it is a project setting rather than a protocol rule. Levels are useful — a milestone you can demo is not the same as something shippable:
+It goes in `coordination/README.md`, next to the branches and the timeout, because it is a project
+setting rather than a protocol rule. **Entries announce and revise it; they never hold it** — an
+entry is buried by the next two hundred, and a session that joins in month three reads the settings
+file, not the log. Levels are useful — a milestone you can demo is not the same as something shippable:
 
 ```markdown
 ## Definition of done

@@ -1,6 +1,6 @@
 {
   "name": "crew",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A Codex CLI port of the crew coordination plugin — same protocol, same channel files, same registry.",
   "interface": {
     "displayName": "crew (cross-device agent coordination)"

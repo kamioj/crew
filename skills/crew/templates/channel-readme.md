@@ -14,6 +14,9 @@ Heartbeat timeout: **<N minutes>** — a row older than this means the node is n
 
 Declared by: the brain, against this list. Accepted by: the owner.
 
+Revised by an entry, recorded here. An entry announcing a new milestone is the proposal; this file
+is where it becomes findable — nobody scrolls two hundred entries to learn what finished means.
+
 Without this the brain's checkpoint never terminates and "are we done?" has no checkable answer
 (crew `completion.md`).
 

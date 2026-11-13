@@ -8,6 +8,8 @@ timezone: UTC+8          # how timestamps here and in entries are read
 
 nodes:
   - id: brain            # entry-ID prefix and dispatch address; unique, never reused
+    holding: none        # volatile fields first: easiest to read, cleanest diffs
+    heartbeat: <YYYY-MM-DD HH:MM>
     host: <machine>      # a label, not a filesystem path
     agent: claude        # claude | codex | other
     role: brain          # brain | node
@@ -15,11 +17,11 @@ nodes:
     lanes: ["coordination/**"]
     branch: <brain-branch>
     reports_to: owner    # the user
-    holding: none        # task id being worked on, or none -- set on ack, cleared on done
-    heartbeat: <YYYY-MM-DD HH:MM>
 
   # Delete the example below once real nodes have joined with $crew-node.
   - id: be-codex
+    holding: none
+    heartbeat: 2026-11-13 18:28
     host: workstation-01
     agent: codex
     role: node
@@ -27,5 +29,3 @@ nodes:
     lanes: ["backend/**", "deploy/**"]
     branch: codex/backend
     reports_to: brain
-    holding: none
-    heartbeat: 2026-11-13 18:28

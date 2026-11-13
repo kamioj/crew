@@ -14,6 +14,8 @@ timezone: UTC+8          # how timestamps in this file and in entries are read
 
 nodes:
   - id: brain            # entry prefix and the name dispatches address
+    holding: none        # volatile fields first - see "Reading one field" below
+    heartbeat: 2026-11-13 18:35
     host: desktop-win    # which machine — a label, never a path
     agent: claude        # claude | codex | other
     role: brain          # brain | node
@@ -21,10 +23,10 @@ nodes:
     lanes: ["coordination/**", "docs/architecture/**"]
     branch: jw/lead
     reports_to: owner    # the user
-    holding: none        # the task id this node is on, or none
-    heartbeat: 2026-11-13 18:35
 
   - id: be-codex
+    holding: BRAIN-012
+    heartbeat: 2026-11-13 18:28
     host: workstation-01
     agent: codex
     role: node
@@ -32,13 +34,13 @@ nodes:
     lanes: ["backend/**", "deploy/**"]
     branch: codex/backend-implementation
     reports_to: brain
-    holding: BRAIN-012
-    heartbeat: 2026-11-13 18:28
 ```
 
 | Field | Meaning |
 |---|---|
 | `id` | entry-ID prefix and dispatch address; unique, never reused |
+| `holding` | the task id this node is working on, or `none` |
+| `heartbeat` | local time of its last session open or close |
 | `host` | which machine, as a label — not a filesystem path (`protocol.md` § Safety) |
 | `agent` | `claude`, `codex`, or whatever runs there |
 | `role` | `brain` or `node` |
@@ -46,14 +48,24 @@ nodes:
 | `lanes` | glob patterns of the files this node owns (`lanes.md`) |
 | `branch` | the branch it pushes; its channel file lives here too |
 | `reports_to` | the id it sends entries to; `owner` means the user |
-| `holding` | the task id this node is working on, or `none` |
-| `heartbeat` | local time of its last session open or close |
 
 ## Who writes it
 
 **Every node edits its own row and nothing else.** This is the one file with more than one writer, so the rule is what keeps it mergeable: two nodes touching two different rows produce either a clean merge or a plain text conflict you resolve by keeping both rows. A node that edits someone else's row can silently change who owns a lane.
 
 Adding a row and removing one are the same operation — one row, your own.
+
+### Reading one field
+
+`holding` and `heartbeat` are the two fields that change constantly, so they sit directly under
+`id`: the churn stays in one predictable place in every diff, and the fields you reach for most
+are the first ones you meet.
+
+**Do not pull a single field out with a line range.** A range ending at a field name silently
+returns nothing for anything ordered after that delimiter — in the field this produced an empty
+heartbeat that was pushed before anyone noticed. Read the whole row and take the value from it, or
+parse the file as YAML. Key order carries no meaning in YAML, so a row written in any order is
+still valid; the order here is for the humans and the diffs.
 
 ### Editing it from another branch
 
