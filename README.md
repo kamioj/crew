@@ -39,11 +39,11 @@ On Codex the same commands are skills: `$crew-next`, `$crew-report`, and so on.
 
 ```bash
 # Claude Code
-claude plugin marketplace add <this-repo>
+claude plugin marketplace add kamioj/crew
 claude plugin install crew@crew
 
 # Codex CLI
-codex plugin marketplace add <this-repo>
+codex plugin marketplace add https://github.com/kamioj/crew
 codex plugin install crew@crew
 ```
 
