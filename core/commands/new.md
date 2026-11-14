@@ -16,14 +16,20 @@ git show origin/<brain-branch>:coordination/nodes.yml
 
 Match the work to a node's `skills` and `lanes`.
 
-**Check its heartbeat first.** Dispatching to a stale node buries the task — nothing will read it, and you will be waiting on work that never started.
+**Check `holding` first.** Dispatching to a node that already holds a task, or whose work has not arrived in a long time, buries this one — nothing will read it, and you will be waiting on work that never started.
 
 The task needs files outside the node's lanes → **name them in the entry**. That grant is scoped to
 the task and expires with it (`lanes.md`), which is how a dispatch reaches into your own lane without
 a standing permission. You can only grant reach into lanes you own; files owned by a third node go
 to that node as its own entry, or wait for a barrier.
 
-## 2 · Write it
+## 2 · If this is one of several parallel lanes
+
+The shared interface comes first. Every seam the lanes will meet at is written down — by you, before
+any of them starts — because the interface is the one thing no lane owns (`lanes.md`). Dispatching
+on a partial contract has each lane invent its half and commit the others to it.
+
+## 3 · Write it
 
 ```
 ## <ID> · <time> · type: task · priority: <P0-P3>
@@ -38,7 +44,7 @@ to that node as its own entry, or wait for a barrier.
 
 Priorities: P0 interrupts current work at the next safe point; P1 next up; P2 normal queue; P3 when convenient. Marking everything P0 teaches nodes to ignore P0.
 
-## 3 · Push
+## 4 · Push
 
 ```bash
 git add coordination/brain-to-nodes.md
@@ -49,6 +55,6 @@ git log origin/<brain-branch>..HEAD    # empty = dispatched
 
 An unpushed dispatch has dispatched nothing.
 
-## 4 · Expect an ack
+## 5 · Expect an ack
 
-The node acknowledges on its next check. No `ack` well past that, and a fresh heartbeat on its row, means it read and did not take it — ask; do not silently reassign.
+The node acknowledges on its next check. No `ack` well past that, while its branch keeps receiving pushes, means it read and did not take it — ask; do not silently reassign.

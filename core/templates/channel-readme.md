@@ -4,7 +4,9 @@ Nodes run on different machines. This repository is the channel: coordination fi
 and **a message is delivered only when its commit is pushed**. Full protocol: crew `protocol.md`.
 
 Timezone for every timestamp here and in entries: **<UTC+8>**.
-Heartbeat timeout: **<N minutes>** — a row older than this means the node is not reporting.
+Quiet period: **<N minutes>** — how long a node may be silent past its `eta` before someone asks.
+Asking means asking the owner to look at that session; it is never a takeover on its own
+(crew `takeover.md`).
 
 ## Definition of done
 
@@ -26,6 +28,7 @@ Without this the brain's checkpoint never terminates and "are we done?" has no c
 | `coordination/brain-to-nodes.md` | brain only | `<brain-branch>` |
 | `coordination/<node-id>-to-brain.md` | that node only | `<node-branch>` |
 | `coordination/nodes.yml` | every node, **its own row only** | `<brain-branch>` |
+| `coordination/decisions.md` | brain only | `<brain-branch>` |
 | `coordination/README.md` | brain | `<brain-branch>` |
 
 Never edit another writer's file. If a merge brings it into your branch, leave it untouched.

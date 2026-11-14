@@ -13,6 +13,7 @@ No hosting-platform API is involved — no `gh`, no `glab`, no issues, no webhoo
 | `coordination/<node-id>-to-<target>.md` | that node only | that node's own branch |
 | `coordination/brain-to-nodes.md` | the brain only | the brain's branch |
 | `coordination/nodes.yml` | every node, **its own row only** | the brain's branch (see `nodes.md`) |
+| `coordination/decisions.md` | the brain only | the brain's branch |
 | `coordination/README.md` | the brain | the brain's branch |
 
 If a merge brings someone else's file into your branch, leave it untouched. Never edit another writer's file — a second writer turns an append-only log into a merge conflict, and the fix is to post an entry asking its owner to change it.
@@ -43,6 +44,21 @@ Unrelated work in progress on your branch → commit only the coordination file:
 ## Append-only
 
 Entries are never rewritten or deleted. A correction is a **new entry that references the old ID** — the log is the audit trail, and editing history destroys the one record of what each side actually knew at the time.
+
+## Settled rulings live where they can be found
+
+`coordination/decisions.md` holds decisions that outlive the entry that made them: a convention, an
+interface choice, a scope ruling. The brain is its only writer, and it is append-only like the
+channel.
+
+This exists because the channel alone does not work for this. In the field three lanes each
+re-raised the same already-settled gaps, because a ruling made two hundred entries ago is
+effectively gone — a node would have to read the whole log to find it, and nobody does.
+
+An entry **announces** a ruling; `decisions.md` is where it stays findable. Before starting a round
+a node checks whether the file has changed since its cursor, and reads the new rulings before doing
+anything. A decision taken but not recorded here will be re-litigated, and the cost lands on
+whoever has to do the work twice.
 
 ## Reading cursor
 

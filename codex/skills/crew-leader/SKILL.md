@@ -15,15 +15,15 @@ git fetch origin
 git show origin/<brain-branch>:coordination/nodes.yml
 ```
 
-A row with `role: brain` and a **fresh** heartbeat means another session is already the brain. Two brains both writing the dispatch file breaks one-writer-per-file, so stop and tell the user — they decide whether the other one is finished.
+A row with `role: brain` whose branch has had recent pushes means another session is already the brain. Two brains both writing the dispatch file breaks one-writer-per-file, so stop and tell the user — they decide whether the other one is finished.
 
-The existing brain row is **stale** → you may take it over, but say so plainly to the user first: the previous brain may simply have been idle.
+The existing brain row looks abandoned → you may take it over, but say so plainly to the user first: the previous brain may simply have been idle, or offline.
 
 No `coordination/` at all → run `$crew-init` first.
 
 ## 2 · Take the row
 
-Set `role: brain`, your `host`, `agent`, `branch`, `lanes` (the brain owns `coordination/**` and usually the architecture docs), `reports_to: owner`, and a fresh `heartbeat`.
+Set `role: brain`, your `host`, `agent`, `branch`, `lanes` (the brain owns `coordination/**` and usually the architecture docs), `decides`, and `reports_to: owner`.
 
 Edit only this row.
 

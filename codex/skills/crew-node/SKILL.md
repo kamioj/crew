@@ -19,7 +19,7 @@ The brain's branch is named in `coordination/README.md`. No `coordination/` → 
 
 ## 2 · Your row
 
-**Already have one** (same `id`) → you are resuming an identity: refresh `heartbeat`, confirm `host`, `branch` and `lanes` still match reality, done.
+**Already have one** (same `id`) → you are resuming an identity: confirm `host`, `branch` and `lanes` still match reality, and set `eta` when you start a step.
 
 **New** → add a row. Pick an `id` that says what you are (`be-codex`, `fe-claude`, `liaison`) and fill every field in `nodes.md`.
 
@@ -48,13 +48,32 @@ It is git-ignored on purpose — it describes this checkout, not the project. `$
 Without the marker a new session here cannot tell which registry row is its own, and a machine
 running several worktrees has no other way to distinguish them.
 
-## 4 · Check you can actually reach the remote
+## 4 · Environment precheck
+
+Run every check before taking any work. In the field, eight parallel lanes all failed their first
+round on environment, not on coordination — the shell named in the project's instructions resolved
+to a stub, a deny-ACL on the worktree's `.git` rejected commits, the build tool's local cache sat
+in a directory the sandbox could not traverse, and temp directories were shared between lanes.
 
 ```bash
-git ls-remote origin -h >/dev/null && echo "remote OK"
+git ls-remote origin -h >/dev/null && echo "remote: OK"   # the push IS the delivery
+git -C . commit --allow-empty -m "crew: precheck" && git reset --soft HEAD~1 && echo "git write: OK"
+<the shell your project's instructions name> --version     # resolves to the real thing, not a stub
+<your build tool> --version                                # and its cache is readable from here
+echo "$TMPDIR / %TEMP%"                                    # not shared with another node
 ```
 
-The push is the delivery, so a node that cannot push cannot send anything. Fix this before taking work.
+| Check | Why this one |
+|---|---|
+| remote reachable | a node that cannot push cannot send anything |
+| **a commit actually succeeds** | directory ACLs reject writes while every read looks fine, and tools report success without changing anything |
+| the named shell resolves | an alias or stub passes `which` and fails on use |
+| build tool + its cache | an unreachable cache turns every task into a download that a sandbox then blocks |
+| temp directory is yours | two nodes sharing one temp path corrupt each other's runs |
+
+**A failed check means do not take work** — report it as a `blocked` entry naming the check. A node
+that joins and then fails on first contact costs a full dispatch round plus the diagnosis; the
+precheck costs a minute.
 
 ## 5 · Report
 

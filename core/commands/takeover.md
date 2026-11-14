@@ -19,23 +19,31 @@ git fetch origin
 git show origin/<brain-branch>:coordination/nodes.yml
 ```
 
-Heartbeat past the timeout (stated in `coordination/README.md`) **and** `holding` naming a task →
-post a request naming the node, its last heartbeat, the task, and why you can take it (your lanes
-and skills). Stale with `holding: none` is not a takeover case — nobody is waiting on it.
+`holding` names a task, its `eta` is well past, and nothing new has arrived on its branch
+(`git log -1 --format=%ci origin/<their-branch>`) → post a request naming the node, its last push
+time, its `eta` and the task. Nothing held, or still within `eta`, is not a case at all.
+
+What you post is a **question**. Silence looks identical whether the node is gone, mid-way through a
+long step, or simply offline — and an offline node cannot receive the takeover either.
 
 ```
 ## <ID> · <time> · type: takeover · priority: P1
 **Subject:** request takeover of <task-ID> from <node-id>
-**Context:** last heartbeat <time>, timeout <N>; last pushed commit <sha>
+**Context:** eta was <time>, last push <time> (<sha>); nothing since
 **Ask:** grant the task to <my-id>; I own <lanes>
 **Acceptance:** a takeover entry from the brain naming me as holder
 ```
 
-Do not start. A stale heartbeat is evidence, not proof — the machine may be fine and the node simply forgot to write — which is why one role decides and it is not the one that noticed.
+Do not start. Silence is not proof: the node may be gone, mid-way through a long step, or simply offline — and an offline node cannot receive the takeover either. That is why one role decides, after asking, and it is not the one that noticed.
 
 ## As the brain — grant it
 
-Post a `takeover` entry naming the task, the node losing it, the node taking it, and — when the losing node may still be alive — **the deadline for its handover entry**.
+**Confirm out of band first.** Ask the owner to look at that session: running, waiting on the
+network, or gone? That question is the only thing that separates the three causes of silence, and
+takeover is the one irreversible action in crew. Owner unreachable → the honest state is "unknown,
+not taken over": post that and wait.
+
+Then post a `takeover` entry naming the task, the node losing it, the node taking it, and — when the losing node may still be alive — **the deadline for its handover entry**.
 
 State both rules in the entry so neither side improvises:
 
@@ -46,7 +54,7 @@ Deadline passes with no handover → the taker proceeds from the last pushed com
 
 ## As the outgoing node
 
-You find the takeover on your next read. Finish the step you are on, then: commit and push work-in-progress to your own branch, post the handover entry (shape in the `takeover` reference), update your heartbeat, stop.
+You find the takeover on your next read. Finish the step you are on, then: commit and push work-in-progress to your own branch, post the handover entry (shape in the `takeover` reference), set `holding: none` and `eta: -`, stop.
 
 Fill in **Notes** — what you were about to do and which approaches you already discarded. The code shows what was written; only you know what it was for, and without it the taker repeats your dead ends.
 
@@ -61,11 +69,11 @@ The dead node's channel file comes with the branch, so keep its name and continu
 `BE-128` → `BE-129` — and every earlier `re:` pointer still resolves.
 
 Then edit **that row** in `coordination/nodes.yml`: same `id`, `lanes` and `reports_to`; new `host`,
-`branch`, `agent` if it differs, fresh `heartbeat`. Write `.crew/node` in your checkout
+`branch`, `agent` if it differs, and your own `eta`. Write `.crew/node` in your checkout
 (`identity.md`). Post your first entry under the continued numbering saying you have adopted it.
 
-Never adopt a row whose heartbeat is fresh — a live node and an adopter sharing one id is the one
-state the registry cannot represent.
+Never adopt a row whose node might still be live — a live node and an adopter sharing one id is the
+one state the registry cannot represent, and that question is answered out of band, not from the file.
 
 ## As the taker (task takeover)
 

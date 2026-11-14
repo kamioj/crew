@@ -35,10 +35,15 @@ git push origin <your-branch>
 Delete `.crew/node` in this checkout too, so a later session here does not resolve to a row that
 no longer exists.
 
+Delete your work branches whose content is already merged — `git push origin --delete <branch>`.
+A dead branch looks exactly like a lane waiting to be integrated, and whoever counts the backlog
+next will count yours (`lanes.md`).
+
 Your channel file stays. It is the record of what you did and other nodes still reference its entry IDs — deleting it would break every `re:` pointing at it.
 
 ## 4 · Tell the brain
 
 A `fyi` entry naming your id, the branch you leave behind, and anything unfinished. The brain needs it to move your lanes to another node.
 
-Stepping away temporarily rather than retiring → do not exit. Just stop; a stale heartbeat already says you are not working, and your row keeps your lanes reserved.
+Stepping away temporarily rather than retiring → do not exit. Just set `eta: -` and stop; your row
+keeps your lanes reserved.

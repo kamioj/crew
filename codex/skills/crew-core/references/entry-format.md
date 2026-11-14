@@ -21,6 +21,21 @@ A reply may keep a `priority:` as well when its own asks need one — an answer 
 - **ID** — the writer's prefix plus a sequential number, never reused: `BRAIN-012`, `BE-128`, `FE-059`. The prefix identifies the writer, which is what makes a single shared git account workable.
 - **Time** — local time, stated once in `coordination/README.md` for the project (e.g. UTC+8).
 
+One optional header field exists so a reader does not have to fold the log by hand:
+
+```
+## <ID> · <time> · type: answer · supersedes: <ID>     # replaces that entry
+## <ID> · <time> · type: cancel · supersedes: <ID>     # retires it with no replacement
+```
+
+It goes on the **new** entry, naming the one it retires. A marker on the old entry would mean editing
+it, and append-only forbids that for good reason — the log is the record of what each side knew at
+the time.
+
+Append-only means a wrong entry stays. It does not mean every reader has to work out for themselves
+that it was wrong: without the marker, a judgement that later proved mistaken reads as current until
+someone has read all the way to its correction. `$crew-board` folds what carries one.
+
 ## Body
 
 A **request** carries these five:

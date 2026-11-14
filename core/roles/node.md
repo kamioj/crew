@@ -21,7 +21,7 @@ git show origin/<brain-branch>:coordination/brain-to-nodes.md
 
 Read every entry past your cursor addressed to your id or to everyone, P0 first then by ID. `ack` what you are taking, in the same check — the brain cannot tell "not seen" from "seen and ignored".
 
-Then update your heartbeat (`takeover.md`), because a node that is working but looks stale will have its task reassigned out from under it.
+Then set `holding` to the task and `eta` to when you expect this step to land (`nodes.md`) — silence past your `eta` is what gets you asked about work that is going fine.
 
 ## Report
 
@@ -31,7 +31,7 @@ Claims need evidence. "Tests pass" with no command and no count is a claim the b
 
 ## Compliance is not progress
 
-A heartbeat, an `ack`, a pushed entry and a correctly named branch are the cost of being reachable
+An `ack`, a registry row, a pushed entry and a correctly named branch are the cost of being reachable
 — they are **not** deliverables, and reporting them as status tells the owner nothing while reading
 like progress to anyone skimming. Progress is what the task's `Acceptance` named.
 
@@ -63,4 +63,4 @@ git log origin/<your-branch>..HEAD        # anything unpushed?
 
 Commit and push work-in-progress to your own branch even when it is unfinished — if your machine dies, everything unpushed is lost, and whoever takes over starts from your last push. Half-finished code on your own branch costs nobody anything; it is never merged by accident, because the taker opens a new branch (`takeover.md`).
 
-Then refresh your heartbeat one last time so the registry shows when you actually stopped.
+Then set `eta: -`, and `holding: none` if you finished, so nobody is left guessing.

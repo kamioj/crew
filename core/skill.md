@@ -20,12 +20,13 @@ The files below live in this skill's `references/`; read the one you need rather
 | Piece | File | What it carries |
 |---|---|---|
 | Channel | `protocol.md` | one writer per file, each on its own branch; how to read and write; the safety rules |
+| Decisions | `protocol.md` § Settled rulings | `coordination/decisions.md` — standing rulings, brain-written, read before each round |
 | Messages | `entry-format.md` | entry header, body fields, types, priorities |
 | Brain | `roles/brain.md` | triage, decide, publish conventions, dispatch, review |
 | Node | `roles/node.md` | find your identity, pull work, report, stay in lane, push before you stop |
 | Identity | `identity.md` | which row this session is — the `.crew/node` marker, the branch cross-check, one checkout one node |
-| Registry | `nodes.md` | `coordination/nodes.yml` — who exists, which files they own, who they report to, heartbeats |
-| Takeover | `takeover.md` | stale nodes, deliberate handover, adopting a dead node's row, why the taker always opens a new branch |
+| Registry | `nodes.md` | `coordination/nodes.yml` — who exists, which files they own, what they decide, who they report to |
+| Takeover | `takeover.md` | why silence has three causes, the out-of-band confirmation, deliberate handover, adopting a row |
 | Lanes | `lanes.md` | file ownership, what a task may additionally grant, barriers for sweeping changes |
 | Completion | `completion.md` | the project's definition of done, who declares it, why compliance is not progress |
 | Setup | `setup.md` | the four files to create in a project |
@@ -45,7 +46,7 @@ The files below live in this skill's `references/`; read the one you need rather
 | `/crew:node` | node | register this machine; learn your lanes and reporting target |
 | `/crew:exit` | node | hand back work, push everything, remove your own row |
 | `/crew:load` | any | settings, registry, unread, stale nodes — read-only |
-| `/crew:next` | node | read unread, refresh heartbeat, surface stale nodes, take one task |
+| `/crew:next` | node | read unread, declare your `eta`, surface quiet nodes, take one task |
 | `/crew:new` | brain | create a task and assign it |
 | `/crew:report` | node | write an entry to your own file and push it |
 | `/crew:cancel` | brain | withdraw a dispatched task |

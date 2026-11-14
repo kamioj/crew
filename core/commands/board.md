@@ -30,7 +30,13 @@ Walk every entry in ID order and keep the **last** state per task. A task's thre
 | `needs-owner` with no answer | Waiting on the user |
 | `takeover` with no handover yet | Handing over |
 
-A later `cancel` or a correcting entry referencing an earlier ID wins over what it corrects — that is what append-only means in practice.
+A later `cancel` or a correcting entry referencing an earlier ID wins over what it corrects — that
+is what append-only means in practice.
+
+**Fold what has been superseded.** An entry carrying `supersedes: <ID>` retires the one it names —
+replacing it, or with `type: cancel`, withdrawing it outright (`entry-format.md`). Show the current
+state; mention the retired entry only if someone asks how it got that way. A mistaken judgement that
+nobody marked reads as current to every later reader.
 
 ## 3 · Report
 
@@ -39,9 +45,9 @@ Group by holder, and show for each task: id, subject, state, holder, lane, age o
 Then two lists that are the point of running this:
 
 - **Waiting on the user** — every unanswered `needs-owner`, oldest first
-- **Stale nodes holding a task** — `heartbeat` past the timeout **and** `holding` naming a task.
-  These are the takeover candidates; a stale row holding nothing is noise, so list it separately
-  if at all.
+- **Quiet nodes holding a task** — `holding` names a task and `eta` has passed. Show when their
+  work last arrived (`git log -1 --format=%ci origin/<their-branch>`). These are questions to ask,
+  not takeover candidates: silence reads the same whether the node is gone, busy or offline.
 
 Cross-check `holding` against what the entries say. The entries are authoritative — a row claiming
 a task the log shows as `done` is stale bookkeeping, and saying so is the point of folding the log.

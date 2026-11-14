@@ -36,8 +36,9 @@ and the last reviewed commit SHA.
 4. Open threads to keep moving:
    <the current asks, blockers and decisions this project is waiting on>
 
-5. Registry — read coordination/nodes.yml. For every heartbeat past <timeout>, name the node and
-   the task it holds, and decide: grant a takeover, or wait. Only you grant one.
+5. Registry — read coordination/nodes.yml. For every node holding a task past its eta, name it and
+   check when its work last arrived. Ask the owner to look at that session before granting any
+   takeover: silence means gone, busy or offline, and only a person can tell which. Only you grant.
 
 6. Output — findings exist: post ONE consolidated entry with the asks ranked, and tell the user
    the findings and suggestions in <language>. Nothing new in the channel and no new commits:

@@ -19,13 +19,13 @@ Do this once, on the brain's branch.
 
 ## 1 · `coordination/README.md` — the project's own channel settings
 
-Copy `templates/channel-readme.md` and fill in: the brain's branch, each node's file and branch, the timezone, and the heartbeat timeout. This is the file every node reads first, so the values that differ per project live here rather than in the protocol.
+Copy `templates/channel-readme.md` and fill in: the brain's branch, each node's file and branch, the timezone, the quiet period, and the definition of done. This is the file every node reads first, so the values that differ per project live here rather than in the protocol.
 
-**Set the heartbeat timeout longer than a node's longest single step.** Too short and a node doing slow work gets declared dead while it is still typing.
+**Set the quiet period longer than a node's longest single step.** Too short and a node doing slow work gets asked about constantly — and the answer to silence is always a question, never a takeover (`takeover.md`).
 
 ## 2 · `coordination/nodes.yml` — the registry
 
-Copy `templates/nodes.yml`, keep the brain's row, delete the examples. Each node adds its own row with `$crew-join`; you do not pre-create rows for machines that have not joined.
+Copy `templates/nodes.yml`, keep the brain's row, delete the examples. Each node adds its own row with `$crew-node`; you do not pre-create rows for machines that have not joined.
 
 ## 3 · `coordination/brain-to-nodes.md` — the brain's channel file
 
@@ -38,11 +38,25 @@ Protocol: `coordination/README.md`.
 ---
 ```
 
-## 4 · One file per node
+## 4 · `coordination/decisions.md` — standing rulings
+
+```markdown
+# Decisions
+
+Append-only. Written only by the brain, on branch `<brain-branch>`.
+Standing rulings that outlive the entry that announced them.
+
+---
+```
+
+A ruling made two hundred entries ago is effectively gone (`protocol.md`). This file is where it
+stays findable, and nodes read it before starting a round.
+
+## 5 · One file per node
 
 Each node's file is created by that node, on its own branch, with the same header naming itself as the only writer. A node that has not joined has no file — that is fine.
 
-## 5 · Ignore the identity marker
+## 6 · Ignore the identity marker
 
 ```gitignore
 .crew/
@@ -51,7 +65,7 @@ Each node's file is created by that node, on its own branch, with the same heade
 Each checkout writes its own `.crew/node` at join (`identity.md`); committing it would hand every
 other checkout the same identity.
 
-## 6 · Point the agents at the protocol
+## 7 · Point the agents at the protocol
 
 Add a line to the project's `CLAUDE.md` / `AGENTS.md`:
 

@@ -47,6 +47,46 @@ Rule of thumb: **if you are about to grant the same file twice, fix the lane ins
 
 An unowned file — matched by nobody's lanes — belongs to the brain by default. Claim it explicitly before working on it rather than assuming.
 
+## A lane is a chain tip, not a branch name
+
+Counting branch names overstates what is outstanding, and it does so badly. In the field 21
+apparently unmerged branch tips were really 4: six of them were a single chain where each name sat
+one commit ahead of the previous, two were fully contained in a sibling, and seven were dead
+branches whose content had been in the integration branch for days.
+
+```bash
+# tips only: branches that are not an ancestor of any other branch
+for b in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin); do
+  git for-each-ref --format='%(refname:short)' refs/remotes/origin |
+    grep -vx "$b" | xargs -I{} git merge-base --is-ancestor "$b" {} 2>/dev/null && continue
+  echo "$b"
+done
+```
+
+Then check each surviving tip by content (`roles/brain.md` § Is this work already merged?), because
+a tip that is "ahead" by commit count may be ahead by nothing at all.
+
+**Delete a branch once its work is in.** A dead branch and a lane waiting to be merged are
+indistinguishable from the outside, and that ambiguity is what produced the 21-versus-4 error —
+twice, with dispatches sent on the wrong numbers. Deleting is the cheapest part of the whole thing:
+
+```bash
+git push origin --delete <branch>
+```
+
+## Before splitting work across lanes
+
+Work that two lanes must integrate needs its **shared interface written down first, by the
+coordinator, before either lane starts.** Not the public contract alone — every seam the two sides
+will meet at.
+
+Dispatching parallel lanes on an incomplete contract does not save the time it looks like it saves:
+in the field, lanes split on an HTTP contract alone had six cross-lane interfaces added mid-flight,
+each one invalidating work already done on both sides.
+
+The interface is the coordinator's to write because it is the one place neither lane owns. A lane
+that invents its half of a seam has committed the other lane to it without asking.
+
 ## Barriers
 
 Some changes cannot be made inside a lane: a rename that touches every module, a package move, a schema migration that invalidates everyone's working copy. Done piecemeal, each node rebases onto a tree that no longer matches what it started from.

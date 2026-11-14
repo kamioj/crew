@@ -27,14 +27,29 @@ git diff <last-reviewed-sha>..origin/<node-branch>
 
 A `done` entry is a claim; the diff is the evidence. Review the active lane branches too, not just the integration branch — problems are cheaper to raise before a merge.
 
+**Judge "already merged" by content, not ancestry** — `git cherry` and `--is-ancestor` compare
+patch-ids, which drift the moment a node squashes or re-applies during integration
+(`roles/brain.md` § Is this work already merged?). And count **chain tips**, not branch names: a
+chain of six branches one commit apart is one tip, and a dead branch nobody deleted looks exactly
+like a lane waiting to merge (`lanes.md`).
+
 What to check is project-specific and belongs in the project's own checkpoint prompt (`templates/checkpoint.md`), not here.
 
-## 3 · Post one entry
+## 3 · Record what you settled
+
+A ruling that applies beyond the entry that announced it goes into `coordination/decisions.md` as
+well — a convention, an interface choice, a scope call. The entry announces it; that file is where
+it stays findable once two hundred more entries have landed on top.
+
+Skipping this is how the same question comes back: a node cannot read a ruling it would have to
+scroll the whole log to find.
+
+## 4 · Post one entry
 
 One consolidated entry per pass, with the asks ranked. Separate topics get their own bold-labelled sections (`entry-format.md`) so the node can answer point by point.
 
 Nothing new in the channel and no new commits → **write nothing**, and say so to the user in one line. An empty checkpoint that posts an entry anyway trains every node to skim the log.
 
-## 4 · Advance the cursor
+## 5 · Advance the cursor
 
 Record the last entry ID you processed per node and the last commit SHA you reviewed. The cursor is private to you — it is not written to the channel.

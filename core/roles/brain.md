@@ -28,13 +28,31 @@ A rule that applies to future work is published once as an entry and lands in th
 
 A dispatch is a `task` entry naming the node (by its `nodes.yml` id), the lane it touches, and the acceptance. One task, one node — see `lanes.md`.
 
-Before dispatching, check `coordination/nodes.yml`: a node whose heartbeat is stale cannot pick anything up, so dispatching to it buries the task. Reassign per `takeover.md` instead.
+Before dispatching, check `coordination/nodes.yml`: a node already `holding` a task, or one whose work has not arrived in a long time, will not pick this up — dispatching to it buries the task.
 
 ## 5 · Review
 
 Whenever there are new commits past your last-reviewed SHA, review the diff itself — not the node's report of it. A node's `done` entry is a claim; the diff is the evidence.
 
 Record what you reviewed (the SHA) in your cursor so the next check starts where this one stopped.
+
+## Is this work already merged?
+
+Every checkpoint has to answer it, and **ancestry will lie to you.** `git cherry` and
+`git merge-base --is-ancestor` compare patch-ids, and a node that resolved conflicts, squashed, or
+re-applied its work during integration produces a different patch-id for the same change. In the
+field two fixes both reported as missing were both present — one of them on a line the reviewer
+then read with their own eyes — and a P0 alert about work being lost was nearly sent.
+
+Judge by content:
+
+```bash
+git diff --name-only <their-base>..origin/<their-branch>          # what that work touched
+git diff origin/<integration-branch> origin/<their-branch> -- <those files>
+```
+
+Empty diff on those files means the content is in, whatever the ancestry says. Non-empty means read
+it before concluding anything — the difference may be later work on the integration side.
 
 ## Declaring the end
 

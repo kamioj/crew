@@ -9,23 +9,25 @@ timezone: UTC+8          # how timestamps here and in entries are read
 nodes:
   - id: brain            # entry-ID prefix and dispatch address; unique, never reused
     holding: none        # volatile fields first: easiest to read, cleanest diffs
-    heartbeat: <YYYY-MM-DD HH:MM>
+    eta: -                # when the current step is expected to land, or -
     host: <machine>      # a label, not a filesystem path
     agent: claude        # claude | codex | other
     role: brain          # brain | node
     skills: [review, architecture, scheduling]
     lanes: ["coordination/**"]
     branch: <brain-branch>
+    decides: [conventions, scope, interfaces between lanes]
     reports_to: owner    # the user
 
   # Delete the example below once real nodes have joined with $crew-node.
   - id: be-codex
     holding: none
-    heartbeat: 2026-11-13 18:28
+    eta: -
     host: workstation-01
     agent: codex
     role: node
     skills: [java, spring, mysql]
     lanes: ["backend/**", "deploy/**"]
     branch: codex/backend
+    decides: [internal design within its lanes, test strategy]
     reports_to: brain

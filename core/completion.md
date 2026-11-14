@@ -1,8 +1,8 @@
 # When is it finished?
 
-The channel, the registry, the heartbeats and the takeover sequence all exist to keep work moving. **None of them says when to stop.** A protocol that only defines flow runs forever, and two failures follow from that, both observed in the field:
+The channel, the registry, the liveness evidence and the takeover sequence all exist to keep work moving. **None of them says when to stop.** A protocol that only defines flow runs forever, and two failures follow from that, both observed in the field:
 
-- a node reported "coordinating per crew, heartbeat and entries pushed" as its progress — protocol compliance mistaken for delivery
+- a node reported "coordinating per crew, registered and entries pushed" as its progress — protocol compliance mistaken for delivery
 - a brain's checkpoint polled on a schedule with no exit, so even with everything done nobody would have declared it
 
 The fix is not more enforcement. It is writing down the end.
@@ -35,12 +35,32 @@ A checkpoint that never asks this question is an infinite loop with extra steps.
 
 ## Protocol compliance is not a deliverable
 
-For a node, this is the rule that matters: **a heartbeat, an `ack`, a pushed entry and a correctly named branch are not progress.** They are the cost of being reachable. Progress is the thing the task's `Acceptance` named — an endpoint that answers, a test that passes, a page that renders.
+For a node, this is the rule that matters: **an `ack`, a registry row, a pushed entry and a correctly named branch are not progress.** They are the cost of being reachable. Progress is the thing the task's `Acceptance` named — an endpoint that answers, a test that passes, a page that renders.
 
-Never report compliance as status. "Registered as be-codex, heartbeat current, entries pushed" tells the owner nothing about whether the work advanced, and it reads as progress to anyone skimming, which makes it worse than silence.
+Never report compliance as status. "Registered as be-codex, row current, entries pushed" tells the owner nothing about whether the work advanced, and it reads as progress to anyone skimming, which makes it worse than silence.
 
 A `done` entry carries what the acceptance asked for, with evidence. If the acceptance is not met, the honest entry is `in-progress` or `blocked`.
 
+## A check you could not run is a deferred check, with an owner
+
+Some verification genuinely cannot happen when the work is written: no database yet, no credentials,
+no device. That is normal. What is not normal is burying it in prose.
+
+A `done` entry whose acceptance could not be fully exercised says so in its own line:
+
+```
+**Deferred checks:** <what was not run> | owner: <node-id or owner> | unblocked by: <what has to exist>
+```
+
+Those lines are a register, and **the definition of done cannot be met while any of them is open.**
+Without that gate they survive to the end of the project: in the field, persistence tests sat marked
+"pending integration" for an entire cycle, and the first real database connection produced four
+classes of failure in one run — including a genuine production bug that no amount of further
+unit testing would have found, because the unit tests were not the thing that was missing.
+
+"Works, pending integration" is not a state anyone owns. A deferred check with an owner and an
+unblock condition is.
+
 ## Why this is the gap enforcement cannot close
 
-crew ships no scripts and no hooks, and the obvious worry is that nodes will break the rules — forget to push, skip a heartbeat. In practice the first real failure was the opposite: **nodes followed the rules exactly and treated that as the output.** No pre-push check or hook would have caught it. Only a written finish line does.
+crew ships no scripts and no hooks, and the obvious worry is that nodes will break the rules — forget to push, forget to update their row. In practice the first real failure was the opposite: **nodes followed the rules exactly and treated that as the output.** No pre-push check or hook would have caught it. Only a written finish line does.

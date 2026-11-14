@@ -21,7 +21,7 @@ Handing a task over → use the handover shape in the `takeover` reference, and 
 
 Posting `done`, `blocked` or a handover → set `holding: none` on your registry row in the same push.
 A row still claiming a finished task makes the next person reason it out by hand, and makes a later
-stale heartbeat look like a mid-task failure.
+later silence look like a mid-task failure.
 
 ## 3 · Commit and push
 

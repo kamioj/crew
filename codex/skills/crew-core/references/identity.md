@@ -57,8 +57,8 @@ A session that never states which node it is leaves the user guessing which of f
 
 `$crew-node <id>` sets the marker to an existing row explicitly — use it when one checkout changes hands, or when `$crew-load` showed you the roster and you want a specific row.
 
-`$crew-load` lists every row with its heartbeat, so "which node should I be" is answerable before you choose.
+`$crew-load` lists every row with what it holds, so "which node should I be" is answerable before you choose.
 
 ## The limit
 
-**One checkout, one node, one session at a time.** Two sessions open in the same checkout read the same marker, so both believe they are the same node — they will both write that node's entries and both refresh its heartbeat, and nothing in the registry can tell them apart. Give each node its own checkout or worktree; that is cheap, and it is what makes the rest of the protocol hold.
+**One checkout, one node, one session at a time.** Two sessions open in the same checkout read the same marker, so both believe they are the same node — they will both write that node's entries and both edit its row, and nothing in the registry can tell them apart. Give each node its own checkout or worktree; that is cheap, and it is what makes the rest of the protocol hold.

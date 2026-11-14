@@ -23,7 +23,7 @@ git fetch origin
 
 ```bash
 git show origin/<brain-branch>:coordination/README.md       # settings: branches, timezone, timeout
-git show origin/<brain-branch>:coordination/nodes.yml       # who exists, lanes, heartbeats
+git show origin/<brain-branch>:coordination/nodes.yml       # who exists, lanes, holding, eta
 git show origin/<brain-branch>:coordination/brain-to-nodes.md
 git show origin/<node-branch>:coordination/<node-file>.md   # one per counterpart
 ```
@@ -35,10 +35,10 @@ Entries past your cursor are what is new. Everything before it you have already 
 - **Mine** — unread entries addressed to this session's id, P0 first
 - **In flight** — tasks with a holder and no `done` yet, per `/crew:board`'s folding rules
 - **Waiting on the user** — unanswered `needs-owner` entries, oldest first
-- **Stale** — heartbeats past the timeout, and the tasks those nodes hold
+- **Quiet** — nodes holding a task and past their `eta`, with when their work last arrived
 
 The last two exist nowhere else. Nothing surfaces them until someone folds the log, which is the whole reason to run this.
 
 ## 5 · Stop
 
-No `ack`, no heartbeat write, no task taken. Loading is not acknowledging — an `ack` you did not mean tells the brain the work is picked up when nobody is doing it.
+No `ack`, no registry write, no task taken. Loading is not acknowledging — an `ack` you did not mean tells the brain the work is picked up when nobody is doing it.
