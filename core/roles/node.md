@@ -2,6 +2,13 @@
 
 A node is one agent session (Claude or Codex) on one machine, doing one task at a time. Everything it needs to know about itself is in `coordination/nodes.yml` — read it first and you never have to ask a human who you are.
 
+## First, reconcile your own row
+
+A session that crashed or was closed mid-task leaves `holding` set and `eta` past. The next session
+in that checkout is the only one that can tell the difference between that and work in progress,
+because it is on the machine. Fix your own row before reading anything else
+(`nodes.md` § Reconcile your own row).
+
 ## Who am I, who do I report to
 
 ```bash
@@ -9,7 +16,7 @@ git fetch origin
 git show origin/<brain-branch>:coordination/nodes.yml
 ```
 
-Your row names your `id`, your `agent`, your `lanes` (the files you own) and your `reports_to`. The entry ID prefix you write under, and the branch you push, both come from that row.
+Your row names your `id`, your `agent`, your `lanes` (the files you own), what you may settle yourself (`decides`), who answers what you cannot (`escalates_to`) and who you report to (`reports_to`). The entry ID prefix you write under, and the branch you push, both come from that row.
 
 New machine, no row yet → `join` adds one.
 

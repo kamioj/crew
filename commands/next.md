@@ -15,6 +15,11 @@ Resolve this session's identity before reading anything: `.crew/node` → the ma
 A mismatch means you are in the wrong checkout, or your row has been adopted — stop there.
 Full rules: `identity.md`. State the result in one line before continuing.
 
+Then reconcile your own row against this machine: `holding` naming a task nobody here is working
+on, or an `eta` long past with nothing running, is left over from a session that ended — fix it now
+(`nodes.md` § Reconcile your own row). You are on this machine, so this is checkable rather than
+inferred, and leaving it makes the brain reason remotely about something you could see.
+
 ## 2 · Fetch and read
 
 ```bash

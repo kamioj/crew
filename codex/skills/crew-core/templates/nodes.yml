@@ -17,6 +17,7 @@ nodes:
     lanes: ["coordination/**"]
     branch: <brain-branch>
     decides: [conventions, scope, interfaces between lanes]
+    escalates_to: owner  # who answers what this node cannot decide
     reports_to: owner    # the user
 
   # Delete the example below once real nodes have joined with $crew-node.
@@ -30,4 +31,5 @@ nodes:
     lanes: ["backend/**", "deploy/**"]
     branch: codex/backend
     decides: [internal design within its lanes, test strategy]
+    escalates_to: owner  # NOT necessarily reports_to -- write it even when identical
     reports_to: brain

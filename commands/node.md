@@ -55,11 +55,18 @@ round on environment, not on coordination — the shell named in the project's i
 to a stub, a deny-ACL on the worktree's `.git` rejected commits, the build tool's local cache sat
 in a directory the sandbox could not traverse, and temp directories were shared between lanes.
 
+**Run every one of them as the identity the agent actually runs as** — not as you. A sandboxed or
+service account can lack traverse permission on one component of a path that reads perfectly for a
+human, and that is not a permissions error you will reproduce by checking it yourself.
+
 ```bash
-git ls-remote origin -h >/dev/null && echo "remote: OK"   # the push IS the delivery
+whoami                                                     # the identity everything below runs as
+git ls-remote origin -h >/dev/null && echo "remote: OK"    # the push IS the delivery
 git -C . commit --allow-empty -m "crew: precheck" && git reset --soft HEAD~1 && echo "git write: OK"
 <the shell your project's instructions name> --version     # resolves to the real thing, not a stub
-<your build tool> --version                                # and its cache is readable from here
+<your build tool> --version                                # and its cache is reachable from here
+ls <the build tool's local cache path> >/dev/null && echo "cache: traversable"
+touch <your agent's own state dir>/.crew-probe && rm "$_" && echo "state dir: writable"
 echo "$TMPDIR / %TEMP%"                                    # not shared with another node
 ```
 
@@ -69,6 +76,8 @@ echo "$TMPDIR / %TEMP%"                                    # not shared with ano
 | **a commit actually succeeds** | directory ACLs reject writes while every read looks fine, and tools report success without changing anything |
 | the named shell resolves | an alias or stub passes `which` and fails on use |
 | build tool + its cache | an unreachable cache turns every task into a download that a sandbox then blocks |
+| **the cache path is traversable** | the failure is a missing `+x` on one parent directory, not an unreadable cache — it reads fine as you and not as the agent |
+| **the agent's own state dir is writable** | a runtime that cannot record its own state reports stale or invented status, and that status is what others plan against |
 | temp directory is yours | two nodes sharing one temp path corrupt each other's runs |
 
 **A failed check means do not take work** — report it as a `blocked` entry naming the check. A node
@@ -77,6 +86,6 @@ precheck costs a minute.
 
 ## 5 · Report
 
-Three lines to the user: your `id` and `agent`; your lanes; who you report to. Then `/crew:next` picks up work.
+Four lines to the user: your `id` and `agent`; your lanes; what you may decide and who answers the rest; who you report to. Then `/crew:next` picks up work.
 
 What the role commits you to is in `roles/node.md`.

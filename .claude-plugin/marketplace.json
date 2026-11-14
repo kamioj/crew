@@ -7,7 +7,7 @@
     {
       "name": "crew",
       "source": "./",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "description": "Cross-device multi-agent coordination over git: one brain directs Claude and Codex nodes on any number of machines through append-only channel files, a node registry with heartbeats, file-ownership lanes and barriers. Conventions only — no scripts, no hooks, no platform API"
     }
   ]

@@ -4,6 +4,19 @@ A node holds a task until it finishes, hands it back, or stops being reachable. 
 
 Takeover is the **only irreversible action in crew**. Everything else appends. So the evidence it rests on gets more scrutiny than anything else here.
 
+## Two different questions
+
+| Question | Verifiable? | How |
+|---|---|---|
+| **Does my own row match what is happening here?** | yes, completely | you are on that machine — look |
+| **Is another node still working?** | no | branch tip, then ask a person |
+
+They get conflated, and conflating them is expensive in both directions: it makes the local check
+look as hopeless as the remote one, and it makes the remote one look as reliable as the local one.
+
+The first is in `nodes.md` § Reconcile your own row and costs nothing. The rest of this file is
+about the second.
+
 ## There is no liveness signal — only evidence, and it is weak
 
 crew cannot see a process on another machine. Nothing in it can. What it can see is what reached the remote:

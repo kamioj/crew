@@ -23,6 +23,7 @@ nodes:
     lanes: ["coordination/**", "docs/architecture/**"]
     branch: jw/lead
     decides: [conventions, scope, interfaces between lanes]
+    escalates_to: owner  # who answers what this node cannot decide
     reports_to: owner    # the user
 
   - id: be-codex
@@ -35,6 +36,7 @@ nodes:
     lanes: ["backend/**", "deploy/**"]
     branch: codex/backend-implementation
     decides: [internal design within its lanes, test strategy]
+    escalates_to: owner  # not necessarily the same as reports_to
     reports_to: brain
 ```
 
@@ -50,6 +52,7 @@ nodes:
 | `lanes` | glob patterns of the files this node owns (`lanes.md`) |
 | `branch` | the branch it pushes; its channel file lives here too |
 | `decides` | what this node settles on its own, without asking |
+| `escalates_to` | who answers what it cannot decide — not necessarily `reports_to` |
 | `reports_to` | the id it sends entries to; `owner` means the user |
 
 ## Who writes it
@@ -108,6 +111,36 @@ own to close.
 Anything in `protocol.md` § Safety stays the owner's regardless of what this field says — scope
 changes, spending, destructive operations, product semantics. `decides` cannot grant those, and a
 row claiming them does not make them granted.
+
+### And who answers the rest
+
+`escalates_to` is the other half, and leaving it unwritten fails quietly: **a node that does not
+know who its approver is will pick one, and it tends to pick whoever wrote the standards.** In the
+field a node sent an in-module design decision to the session that authored the repository's
+conventions — the most authoritative-looking party, and not its approver, which was the owner.
+
+It is often the same id as `reports_to`, and it is written anyway, because the case where they
+differ is exactly the case nobody notices: your work is reported to the brain, while the decision
+you are stuck on belongs to the owner.
+
+## Reconcile your own row
+
+Before anything else in a session, check your **own** row against what is actually happening on
+this machine. You are standing on it — this needs no inference and no permission:
+
+- `holding` names a task you are not working on → a previous session ended without clearing it.
+  Clear it, or pick the task up deliberately.
+- `eta` is in the past and nothing is running → set it to `-`.
+- `branch` does not match where you are → stop; see `identity.md`.
+
+**A record and a process on the same machine are checkable, so check them.** In the field a job
+board showed four lanes `running` whose processes were long dead, and the operator correcting it by
+hand marked a live lane cancelled and had to restore it — all on one machine, all verifiable, none
+verified. A row left claiming a task after a crash is the most common case, and it is the one that
+makes someone else reason remotely about something you could have settled by looking.
+
+This is the half of liveness that works. The other half — is some *other* node still working —
+cannot be settled this way at all (`takeover.md`).
 
 ## Holding
 
